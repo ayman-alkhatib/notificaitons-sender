@@ -11,7 +11,6 @@ function Form({ username, avatar }) {
     if (target) notification.target = target;
     if (message) notification.message = message;
 
-    console.log(notification);
     const { error } = await supabase
       .from("notifications")
       .insert(notification)
