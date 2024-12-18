@@ -4,8 +4,11 @@ import { supabase } from "../client";
 function Form({ username, avatar }) {
   const [notificationType, setNotificationType] = useState("followed you");
   const [target, setTarget] = useState("");
+  const [message, setMessage] = useState("");
 
-  async function clickfn(notificationType, target, message) {
+  async function clickfn(e) {
+    e.preventDefault();
+
     let notification = { username, avatar, notificationType };
 
     if (target) notification.target = target;
@@ -17,16 +20,12 @@ function Form({ username, avatar }) {
       .select();
 
     if (error) console.error(error);
+
+    setNotificationType("followed you");
+    setTarget("");
   }
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        clickfn(notificationType, target);
-        setNotificationType("followed you");
-        setTarget("");
-      }}
-    >
+    <form onSubmit={clickfn}>
       <fieldset
         onChange={(e) => {
           setNotificationType(e.target.value);
@@ -115,7 +114,14 @@ function Form({ username, avatar }) {
       {notificationType === "sent private message" && (
         <div>
           <label htmlFor="message">message</label>
-          <textarea id="message" placeholder="message" />
+          <textarea
+            value={message}
+            onChange={(e) => {
+              setMessage(e.target.value);
+            }}
+            id="message"
+            placeholder="message"
+          />
         </div>
       )}
       <button type="submit">send</button>
