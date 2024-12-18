@@ -12,7 +12,8 @@ function Form({ username, avatar }) {
     let notification = { username, avatar, notificationType };
 
     if (target) notification.target = target;
-    if (message) notification.message = message;
+
+    if (message) notification.messagePreview = message;
 
     const { error } = await supabase
       .from("notifications")
@@ -23,6 +24,7 @@ function Form({ username, avatar }) {
 
     setNotificationType("followed you");
     setTarget("");
+    setMessage("");
   }
   return (
     <form onSubmit={clickfn}>
@@ -111,7 +113,7 @@ function Form({ username, avatar }) {
           />
         </div>
       )}
-      {notificationType === "sent private message" && (
+      {notificationType.includes("message") && (
         <div>
           <label htmlFor="message">message</label>
           <textarea
